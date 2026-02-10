@@ -1,6 +1,7 @@
 import { GoogleGenAI, Type } from "@google/genai";
 
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY || "" });
+const ai = null;
+// const ai = new GoogleGenAI({ apiKey: process.env.API_KEY || "" });
 
 // second acc
 const FORMSPREE_URL = "https://formspree.io/f/mqedaogn";
@@ -39,66 +40,66 @@ export const sendNotification = async (userName: string, message: string) => {
 /**
  * Fetches recommendations for all movies in a single batch call with local caching.
  */
-export const getBatchMovieRecommendations = async (movieTitles: string[]) => {
-  // 1. Check Cache First
-  try {
-    const cached = localStorage.getItem(CACHE_KEY);
-    if (cached) {
-      const parsed = JSON.parse(cached);
-      // Basic validation: ensure all titles requested are in the cache
-      const hasAll = movieTitles.every((title) => parsed[title]);
-      if (hasAll) {
-        console.log("Using cached movie recommendations");
-        return parsed;
-      }
-    }
-  } catch (e) {
-    console.warn("Cache read error", e);
-  }
+// export const getBatchMovieRecommendations = async (movieTitles: string[]) => {
+//   // 1. Check Cache First
+//   try {
+//     const cached = localStorage.getItem(CACHE_KEY);
+//     if (cached) {
+//       const parsed = JSON.parse(cached);
+//       // Basic validation: ensure all titles requested are in the cache
+//       const hasAll = movieTitles.every((title) => parsed[title]);
+//       if (hasAll) {
+//         console.log("Using cached movie recommendations");
+//         return parsed;
+//       }
+//     }
+//   } catch (e) {
+//     console.warn("Cache read error", e);
+//   }
 
-  // 2. Call API if not cached or incomplete
-  try {
-    const response = await ai.models.generateContent({
-      model: "gemini-3-flash-preview",
-      contents: `For each of these movies: ${movieTitles.join(", ")}, write a very romantic 2-sentence blurb explaining why it's perfect for a date with Thu Thu. Keep it sweet and personal.`,
-      config: {
-        responseMimeType: "application/json",
-        responseSchema: {
-          type: Type.OBJECT,
-          properties: {
-            recommendations: {
-              type: Type.ARRAY,
-              items: {
-                type: Type.OBJECT,
-                properties: {
-                  title: { type: Type.STRING },
-                  message: { type: Type.STRING },
-                },
-                required: ["title", "message"],
-              },
-            },
-          },
-          required: ["recommendations"],
-        },
-      },
-    });
+//   // 2. Call API if not cached or incomplete
+//   try {
+//     const response = await ai.models.generateContent({
+//       model: "gemini-3-flash-preview",
+//       contents: `For each of these movies: ${movieTitles.join(", ")}, write a very romantic 2-sentence blurb explaining why it's perfect for a date with Thu Thu. Keep it sweet and personal.`,
+//       config: {
+//         responseMimeType: "application/json",
+//         responseSchema: {
+//           type: Type.OBJECT,
+//           properties: {
+//             recommendations: {
+//               type: Type.ARRAY,
+//               items: {
+//                 type: Type.OBJECT,
+//                 properties: {
+//                   title: { type: Type.STRING },
+//                   message: { type: Type.STRING },
+//                 },
+//                 required: ["title", "message"],
+//               },
+//             },
+//           },
+//           required: ["recommendations"],
+//         },
+//       },
+//     });
 
-    const data = JSON.parse(response.text);
-    const recMap: Record<string, string> = {};
-    data.recommendations.forEach((item: any) => {
-      recMap[item.title] = item.message;
-    });
+//     const data = JSON.parse(response.text);
+//     const recMap: Record<string, string> = {};
+//     data.recommendations.forEach((item: any) => {
+//       recMap[item.title] = item.message;
+//     });
 
-    // 3. Save to Cache
-    localStorage.setItem(CACHE_KEY, JSON.stringify(recMap));
+//     // 3. Save to Cache
+//     localStorage.setItem(CACHE_KEY, JSON.stringify(recMap));
 
-    return recMap;
-  } catch (error) {
-    console.error("Batch Recommendation Error:", error);
-    // Return empty so the frontend can use its static fallbacks
-    return {};
-  }
-};
+//     return recMap;
+//   } catch (error) {
+//     console.error("Batch Recommendation Error:", error);
+//     // Return empty so the frontend can use its static fallbacks
+//     return {};
+//   }
+// };
 
 /**
  * Fallback for single movie recommendation (used if batch fails)

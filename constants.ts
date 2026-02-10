@@ -1,8 +1,9 @@
 import { Movie, Song } from "./types";
 
 // Using a high-availability example MP3 that is widely supported and has high uptime
-export const VALENTINE_SONG_URL =
-  "https://www.youtube.com/watch?v=oMqIne65uHs&list=RDoMqIne65uHs&start_radio=1";
+// export const VALENTINE_SONG_URL =
+//   "https://www.youtube.com/watch?v=oMqIne65uHs&list=RDoMqIne65uHs&start_radio=1";
+export const VALENTINE_SONG_URL = "/media/valentine.mp3";
 
 export const MOVIES: Movie[] = [
   {

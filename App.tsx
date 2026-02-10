@@ -5,10 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import FallingHearts from "./components/FallingHearts";
 import { Page, Movie, Song } from "./types";
 import { VALENTINE_SONG_URL, MOVIES, SONGS } from "./constants";
-import {
-  sendNotification,
-  getBatchMovieRecommendations,
-} from "./services/geminiService";
+import { sendNotification } from "./services/geminiService";
 
 const App: React.FC = () => {
   const [currentPage, setCurrentPage] = useState<Page>(Page.LANDING);
@@ -367,7 +364,7 @@ const MoviesPage: React.FC<{ onBack: () => void; onNext: () => void }> = ({
     const fetchRecs = async () => {
       setIsLoading(true);
       const titles = MOVIES.map((m) => m.title);
-      const recMap = await getBatchMovieRecommendations(titles);
+      // const recMap = await getBatchMovieRecommendations(titles);
 
       const finalRecs: Record<string, string> = {};
       MOVIES.forEach((movie) => {
