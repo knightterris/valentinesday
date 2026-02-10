@@ -1,0 +1,7 @@
+{
+  "name": "Valentine's for Thu Thu",
+  "description": "A beautiful, responsive 3D Valentine's Day website with scrolling animations, falling hearts, and movie recommendations.",
+  "requestFramePermissions": [
+    "microphone"
+  ]
+}
