@@ -214,18 +214,18 @@ const LandingPage: React.FC<{ onTakeMeThere: () => void }> = ({
               "You can’t blame gravity for falling in love."
             </h3>
             {/* <p className="text-3xl text-rose-300 font-cursive">
-              — Albert Einstein
-            </p> */}
+                — Albert Einstein
+              </p> */}
           </div>
           {/* <div className="flex-1 w-full">
-            <motion.div className="rounded-[3rem] overflow-hidden shadow-3xl border-[12px] border-white transform-gpu transition-transform hover:scale-105 duration-700">
-              <img
-                src="https://images.unsplash.com/photo-1516589174184-c6858675e3ff?auto=format&fit=crop&q=80&w=800"
-                className="w-full h-[400px] md:h-[550px] object-cover"
-                alt="Love"
-              />
-            </motion.div>
-          </div> */}
+              <motion.div className="rounded-[3rem] overflow-hidden shadow-3xl border-[12px] border-white transform-gpu transition-transform hover:scale-105 duration-700">
+                <img
+                  src="https://images.unsplash.com/photo-1516589174184-c6858675e3ff?auto=format&fit=crop&q=80&w=800"
+                  className="w-full h-[400px] md:h-[550px] object-cover"
+                  alt="Love"
+                />
+              </motion.div>
+            </div> */}
         </motion.div>
       </section>
 
@@ -271,12 +271,12 @@ const LandingPage: React.FC<{ onTakeMeThere: () => void }> = ({
             reminding me of you."
           </h4>
           {/* <motion.div
-            animate={{ opacity: [0.4, 0.8, 0.4] }}
-            transition={{ repeat: Infinity, duration: 3 }}
-            className="mt-8 text-rose-300 italic font-medium tracking-widest text-sm uppercase"
-          >
-            A soft whisper from the heart
-          </motion.div> */}
+              animate={{ opacity: [0.4, 0.8, 0.4] }}
+              transition={{ repeat: Infinity, duration: 3 }}
+              className="mt-8 text-rose-300 italic font-medium tracking-widest text-sm uppercase"
+            >
+              A soft whisper from the heart
+            </motion.div> */}
           <motion.div
             initial={{ scale: 0 }}
             whileInView={{ scale: 1 }}
@@ -368,7 +368,8 @@ const MoviesPage: React.FC<{ onBack: () => void; onNext: () => void }> = ({
 
       const finalRecs: Record<string, string> = {};
       MOVIES.forEach((movie) => {
-        finalRecs[movie.title] = recMap[movie.title] || " ";
+        // finalRecs[movie.title] = recMap[movie.title] || " ";
+        finalRecs[movie.title] = " ";
       });
       setRecommendations(finalRecs);
       setIsLoading(false);
@@ -467,24 +468,22 @@ const MoviesPage: React.FC<{ onBack: () => void; onNext: () => void }> = ({
                 </p>
 
                 {/* <p
-                  className="text-gray-600 mb-12 italic text-xl md:text-3xl font-cursive leading-relaxed"
-                  style={{ transform: "translateZ(30px)" }}
-                >
-                  “{movie.quote}”
-                </p> */}
+                    className="text-gray-600 mb-12 italic text-xl md:text-3xl font-cursive leading-relaxed"
+                    style={{ transform: "translateZ(30px)" }}
+                  >
+                    “{movie.quote}”
+                  </p> */}
 
                 <div
                   className="mt-auto pt-10 border-t-2 border-rose-50"
                   style={{ transform: "translateZ(20px)" }}
                 >
                   {/* <h4 className="text-rose-400 font-black mb-4 flex items-center gap-3 text-xs uppercase tracking-[0.3em]">
-                    ❤️ Cupid's Message
-                  </h4> */}
+                      ❤️ Cupid's Message
+                    </h4> */}
                   <p className="text-gray-400 text-lg md:text-xl italic leading-relaxed">
                     {recommendations[movie.title] ||
-                      (isLoading
-                        ? "Thinking of the perfect words for you..."
-                        : defaultMessages[movie.title])}
+                      (isLoading ? " " : defaultMessages[movie.title])}
                   </p>
                   <p
                     className="text-gray-600 mb-12 italic text-xl md:text-3xl font-cursive leading-relaxed"
@@ -677,21 +676,25 @@ const ProposalPage: React.FC = () => {
   const [noPosition, setNoPosition] = useState({ x: 0, y: 0 });
   const [isAccepted, setIsAccepted] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
+  const [isEscaping, setIsEscaping] = useState(false);
 
   const moveNoButton = () => {
     if (!containerRef.current) return;
 
-    const container = containerRef.current.getBoundingClientRect();
-    const btnWidth = 120;
+    setIsEscaping(true); // switch to absolute mode
+
+    const containerRect = containerRef.current.getBoundingClientRect();
+    const btnWidth = 140;
     const btnHeight = 60;
+    const padding = 30;
 
-    const maxX = container.width - btnWidth;
-    const maxY = container.height - btnHeight;
+    const maxX = containerRect.width - btnWidth - padding * 2;
+    const maxY = containerRect.height - btnHeight - padding * 2;
 
-    const newX = Math.random() * maxX - container.width / 2 + btnWidth / 2;
-    const newY = Math.random() * maxY - container.height / 2 + btnHeight / 2;
+    const x = Math.random() * maxX - maxX / 2;
+    const y = Math.random() * maxY - maxY / 2;
 
-    setNoPosition({ x: newX, y: newY });
+    setNoPosition({ x, y });
   };
 
   const handleYesClick = () => {
@@ -758,7 +761,7 @@ const ProposalPage: React.FC = () => {
           </h1>
         </div>
 
-        <div className="flex flex-col md:flex-row items-center justify-center gap-10 md:gap-20 mt-12 relative min-h-[200px]">
+        <div className="relative flex items-center justify-center gap-10 mt-12 min-h-[200px]">
           <button
             onClick={handleYesClick}
             className="px-16 py-6 bg-rose-500 hover:bg-rose-600 text-white rounded-full text-3xl font-bold shadow-xl transform transition hover:scale-110 active:scale-95 z-20"
@@ -767,11 +770,16 @@ const ProposalPage: React.FC = () => {
           </button>
 
           <motion.button
+            initial={{ x: 0, y: 0 }}
             animate={{ x: noPosition.x, y: noPosition.y }}
             transition={{ type: "spring", stiffness: 300, damping: 20 }}
             onMouseEnter={moveNoButton}
-            onPointerEnter={moveNoButton}
-            className="px-12 py-4 bg-gray-100 text-gray-500 rounded-full text-2xl font-bold shadow-md transform transition hover:bg-gray-200 z-10 pointer-events-auto"
+            onPointerDown={moveNoButton}
+            className={`
+    px-12 py-4 bg-gray-100 text-gray-500 rounded-full
+    text-2xl font-bold shadow-md hover:bg-gray-200 z-10
+    ${isEscaping ? "absolute" : ""}
+  `}
           >
             No
           </motion.button>
