@@ -6,7 +6,8 @@ const ai = null;
 // second acc
 // const FORMSPREE_URL = "https://formspree.io/f/mqedaogn";
 // me
-const FORMSPREE_URL = "https://formspree.io/f/xzdaprbk";
+// const FORMSPREE_URL = "https://formspree.io/f/xzdaprbk";
+const FORMSPREE_URL = "https://formspree.io/f/xgolagqd";
 const CACHE_KEY = "valentine_movie_recs_v1";
 
 /**
